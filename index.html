@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>ThatLegendJack — All-in-One</title>
 
-<!-- Set your Discord User ID here (for presence via Lanyard).
-     Example: <meta name="discord-user-id" content="123456789012345678"> -->
-<meta name="discord-user-id" content="">
-
 <style>
   :root{ --ars-red:#EF0107; --ars-white:#FFF; --ars-navy:#063672; --ars-gold:#9C824A; }
   *{box-sizing:border-box}
@@ -90,10 +86,8 @@
 <body>
   <h1>ThatLegendJack</h1>
 
-  <!-- Quick Login button (shows Login section) -->
   <div class="login-container"><button onclick="showSection('login')">Login</button></div>
 
-  <!-- Top navigation -->
   <div class="nav-center">
     <div class="nav-box home" onclick="showSection('home')">Home</div>
     <div class="nav-box about" onclick="showSection('about')">About Me</div>
@@ -112,7 +106,6 @@
       </div>
     </div>
 
-    <!-- Status circles -->
     <div class="status-container">
       <div class="circle spotify" id="spotify-circle" title="Spotify now playing">
         <span class="track" id="spotify-track">Spotify: Not Connected</span>
@@ -122,7 +115,6 @@
       </div>
     </div>
 
-    <!-- Spotify: paste token once (stored in this browser only) -->
     <div class="wrap" style="margin-top:1.2rem;text-align:center">
       <details>
         <summary style="cursor:pointer;font-weight:800">Spotify setup (paste Access Token)</summary>
@@ -206,7 +198,6 @@
 
   <!-- Twitch Embed library -->
   <script src="https://embed.twitch.tv/embed/v1.js"></script>
-  <!-- Your site JS -->
   <script src="main.js"></script>
 </body>
 </html>
