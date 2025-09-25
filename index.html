@@ -1,129 +1,91 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ThatLegendJack</title>
-  <link rel="stylesheet" href="style.css"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ThatLegendJack</title>
+
+<style>
+  :root{
+    --ars-red:#EF0107; --ars-white:#FFF; --ars-navy:#063672; --ars-gold:#9C824A;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#fff;text-align:center;
+       background:linear-gradient(135deg,var(--ars-red) 0%,var(--ars-white) 35%,var(--ars-navy) 70%,var(--ars-gold) 100%)}
+  h1{
+    margin:1rem 0 0; font-size:2.8rem; font-weight:900; text-shadow:2px 2px 5px #000;
+    background:linear-gradient(270deg,#EF0107,#FFFFFF,#063672,#EF0107);background-size:600% 600%;
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;animation:gradientShift 8s ease infinite;
+  }
+  @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+  .login-container{position:fixed;top:10px;right:20px;background:rgba(0,0,0,.75);padding:10px;border-radius:10px;z-index:20}
+  .login-container button{padding:.6rem 1rem;background:var(--ars-red);color:#fff;border:none;border-radius:8px;cursor:pointer}
+  .nav-center{margin:1rem auto 0;display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+  .nav-box{display:block;min-width:150px;padding:.9rem 1.6rem;font-weight:800;color:#fff;text-decoration:none;border-radius:12px;
+    box-shadow:2px 2px 8px rgba(0,0,0,.6);cursor:pointer}
+  .about{background:linear-gradient(135deg,var(--ars-red),var(--ars-gold))}
+  .leaderboards{background:linear-gradient(135deg,var(--ars-navy),var(--ars-white))}
+  .home{background:linear-gradient(135deg,var(--ars-gold),var(--ars-red))}
+  .hidden{display:none}
+  section{padding:1rem}
+  .wrap{max-width:900px;margin:1rem auto;padding:1rem;background:rgba(0,0,0,.35);border-radius:12px;text-align:left}
+</style>
 </head>
 <body>
   <h1>ThatLegendJack</h1>
-  <div class="login-container" id="authBox"><a href="login.html">Login</a></div>
+  <div class="login-container"><button onclick="showSection('login')">Login</button></div>
 
   <div class="nav-center">
-    <a class="nav-box" href="about.html">About Me</a>
-    <a class="nav-box" href="leaderboards.html">Leaderboards</a>
+    <div class="nav-box home" onclick="showSection('home')">Home</div>
+    <div class="nav-box about" onclick="showSection('about')">About Me</div>
+    <div class="nav-box leaderboards" onclick="showSection('leaderboards')">Leaderboards</div>
   </div>
 
-  <section class="player-wrap">
-    <div class="player-frame">
-      <div id="twitch-player"></div>
-      <div id="twitch-offline" class="offline-banner">
-        <div class="offline-text">ThatLegendJackk is currently offline.</div>
-        <a class="offline-btn" target="_blank" href="https://www.twitch.tv/ThatLegendJackk">Go to Twitch</a>
-      </div>
+  <!-- HOME -->
+  <section id="home">
+    <h2>Welcome to my homepage</h2>
+    <p>This will show Twitch, Spotify and Discord status.</p>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="hidden">
+    <h2>About Me</h2>
+    <div class="wrap" id="about-box">
+      Editable about me text goes here (if logged in as staff).
     </div>
   </section>
 
-  <div class="social-bar">
-    <a class="social-link" id="link_twitch" href="https://www.twitch.tv/ThatLegendJackk"><img id="img_twitch"></a>
-    <a class="social-link" id="link_tiktok" href="https://www.tiktok.com/@ThatLegendJackk"><img id="img_tiktok"></a>
-    <a class="social-link" id="link_kick" href="https://kick.com/ThatLegendJackk"><img id="img_kick"></a>
-    <a class="social-link" id="link_onlyfans" href="https://onlyfans.com/yourlink"><img id="img_onlyfans"></a>
-  </div>
-
-  <div class="status-container">
-    <div class="circle spotify"><span id="spotify-track">Spotify: Not Playing</span></div>
-    <div class="circle discord" id="discord-status">Discord: Offline</div>
-  </div>
-
-  <div class="panel" id="staffPanel"></div>
-  <div class="panel" id="adminPanel"></div>
-
-  <script src="https://embed.twitch.tv/embed/v1.js"></script>
-  <script src="main.js"></script>
-</body>
-</html>
-
-<!-- about.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>About - ThatLegendJack</title>
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-  <h1>About Me</h1>
-  <div class="login-container" id="authBox"><a href="login.html">Login</a></div>
-  <div class="nav-center">
-    <a class="nav-box" href="index.html">Home</a>
-    <a class="nav-box" href="leaderboards.html">Leaderboards</a>
-  </div>
-  <section class="player-wrap"><div id="about-box"></div></section>
-  <script src="main.js"></script>
-</body>
-</html>
-
-<!-- leaderboards.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Leaderboards - ThatLegendJack</title>
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-  <h1>Leaderboards</h1>
-  <div class="login-container" id="authBox"><a href="login.html">Login</a></div>
-  <div class="nav-center">
-    <a class="nav-box" href="index.html">Home</a>
-    <a class="nav-box" href="about.html">About Me</a>
-  </div>
-  <section class="content">
-    <div class="leaderboard-container">
-      <div class="bits"><h2>Bits Leaderboard</h2><div id="bits-list"></div></div>
-      <div class="subs">
-        <h2>Gifted Subs</h2>
-        <div id="subs-list"></div>
-        <div id="subs-controls" style="display:none;">
-          <input id="sub_user" placeholder="Username"/>
-          <input id="sub_gifts" type="number"/>
-          <button onclick="addOrUpdateSub()">Add/Update</button>
-          <button onclick="resetSubs()">Reset</button>
-        </div>
-      </div>
+  <!-- LEADERBOARDS -->
+  <section id="leaderboards" class="hidden">
+    <h2>Leaderboards</h2>
+    <div class="wrap">
+      <h3>Bits Leaderboard</h3>
+      <div id="bits-list">[Twitch bits API data here]</div>
+      <h3>Gifted Subs</h3>
+      <div id="subs-list">[Staff-editable subs list here]</div>
     </div>
   </section>
-  <section class="panel" id="twitchCreds">
-    <h3>Twitch API Credentials</h3>
-    <input id="twitch_client_id" placeholder="Client ID"/>
-    <input id="twitch_access_token" placeholder="Access Token"/>
-    <button onclick="saveTwitchCreds()">Save</button>
-  </section>
-  <script src="main.js"></script>
-</body>
-</html>
 
-<!-- login.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - ThatLegendJack</title>
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-  <h1>Login</h1>
-  <form onsubmit="return doLogin(event)">
-    <input id="username" placeholder="Username" required/>
-    <input id="password" type="password" placeholder="Password" required/>
-    <button type="submit">Login</button>
-  </form>
-  <script src="main.js"></script>
+  <!-- LOGIN -->
+  <section id="login" class="hidden">
+    <h2>Login</h2>
+    <form onsubmit="return doLogin(event)">
+      <input id="username" placeholder="Username" required/>
+      <input id="password" type="password" placeholder="Password" required/>
+      <button type="submit">Login</button>
+    </form>
+  </section>
+
+<script>
+  function showSection(id){
+    document.querySelectorAll("section").forEach(sec=>sec.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+  }
+  function doLogin(e){
+    e.preventDefault();
+    alert("Logging in... (hook this to /api/auth/login)");
+  }
+</script>
 </body>
 </html>
