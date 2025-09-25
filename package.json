@@ -4,8 +4,8 @@
   "description": "ThatLegendJack website + Node/Express backend with PostgreSQL",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node main.js",
+    "dev": "nodemon main.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
