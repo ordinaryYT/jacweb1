@@ -1,0 +1,119 @@
+// server.js
+try { require('dotenv').config(); } catch (_) {}
+
+const path = require('path');
+const express = require('express');
+const app = express();
+
+/* ============================
+   Serve index.html (inline HTML with link to /main.js)
+============================ */
+app.get('/', (req, res) => {
+  res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ThatLegendJack — All-in-One</title>
+<style>
+  :root{ --ars-red:#EF0107; --ars-white:#FFF; --ars-navy:#063672; --ars-gold:#9C824A; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#fff;text-align:center;
+    background:linear-gradient(135deg,var(--ars-red) 0%,var(--ars-white) 35%,var(--ars-navy) 70%,var(--ars-gold) 100%);}
+  h1{margin:1rem 0 0;font-size:2.8rem;font-weight:900;text-shadow:2px 2px 5px #000;
+    background:linear-gradient(270deg,#EF0107,#FFFFFF,#063672,#EF0107);
+    background-size:600% 600%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    animation:gradientShift 8s ease infinite;}
+  @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+  .login-container{position:fixed;top:10px;right:20px;background:rgba(0,0,0,.75);padding:10px;border-radius:10px;z-index:20}
+  .login-container button{padding:.6rem 1rem;background:var(--ars-red);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700}
+  .nav-center{margin:1rem auto 0;display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+  .nav-box{display:block;min-width:150px;padding:.9rem 1.6rem;font-weight:800;color:#fff;text-decoration:none;border-radius:12px;
+    box-shadow:2px 2px 8px rgba(0,0,0,.6);cursor:pointer;transition:.15s}
+  .home{background:linear-gradient(135deg,var(--ars-gold),var(--ars-red))}
+  .about{background:linear-gradient(135deg,var(--ars-red),var(--ars-gold))}
+  .leaderboards{background:linear-gradient(135deg,var(--ars-navy),var(--ars-white))}
+  .hidden{display:none} section{padding:1rem}
+  .wrap{max-width:1100px;margin:1rem auto;padding:1rem;background:rgba(0,0,0,.35);border-radius:12px;text-align:left}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .card{border-radius:12px;padding:1rem;border:2px solid var(--ars-white)}
+  .bits{background:linear-gradient(135deg,var(--ars-navy),var(--ars-white))}
+  .subs{background:linear-gradient(135deg,var(--ars-red),var(--ars-gold))}
+</style>
+</head>
+<body>
+  <h1>ThatLegendJack</h1>
+  <div class="login-container"><button onclick="showSection('login')">Login</button></div>
+  <div class="nav-center">
+    <div class="nav-box home" onclick="showSection('home')">Home</div>
+    <div class="nav-box about" onclick="showSection('about')">About Me</div>
+    <div class="nav-box leaderboards" onclick="showSection('leaderboards')">Leaderboards</div>
+  </div>
+
+  <section id="home"><p>Welcome to my homepage (Twitch, Spotify, Discord, etc.).</p></section>
+  <section id="about" class="hidden"><div class="wrap"><h2>About Me</h2><p>This text can be edited by staff.</p></div></section>
+  <section id="leaderboards" class="hidden">
+    <h2>Leaderboards</h2>
+    <div class="wrap grid">
+      <div class="card bits">
+        <h3>Bits Leaderboard</h3>
+        <div id="bits-list">[Twitch bits leaderboard goes here]</div>
+      </div>
+      <div class="card subs">
+        <h3>Gifted Subs</h3>
+        <div id="subs-list">[Gifted subs go here]</div>
+      </div>
+    </div>
+  </section>
+  <section id="login" class="hidden">
+    <h2>Login</h2>
+    <form onsubmit="return doLogin(event)">
+      <input id="username" placeholder="Username" required/>
+      <input id="password" type="password" placeholder="Password" required/>
+      <button type="submit">Login</button>
+    </form>
+  </section>
+
+  <script src="https://embed.twitch.tv/embed/v1.js"></script>
+  <script src="/main.js"></script>
+</body>
+</html>`);
+});
+
+/* ============================
+   Serve JS (main.js inline here)
+============================ */
+app.get('/main.js', (req, res) => {
+  res.type('application/javascript').send(`
+// main.js
+
+function showSection(id){
+  document.querySelectorAll("section").forEach(sec=>sec.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
+
+function doLogin(e){
+  e.preventDefault();
+  const user=document.getElementById("username").value;
+  const pass=document.getElementById("password").value;
+  alert("Login attempt: "+user+" / "+pass+" (hook backend here)");
+  showSection('home');
+  return false;
+}
+
+window.addEventListener('DOMContentLoaded',()=>{ showSection('home'); });
+  `);
+});
+
+/* ============================
+   Example API config endpoint
+============================ */
+app.get('/api/config', (req, res) => {
+  res.json({ discord_user_id: process.env.DISCORD_USER_ID || null });
+});
+
+/* ============================
+   Start server
+============================ */
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log("Server running on :" + PORT));
