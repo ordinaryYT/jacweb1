@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Leaderboards - ThatLegendJack</title>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <h1>Leaderboards</h1>
+  <div class="nav-center">
+    <a class="nav-box" href="index.html">Home</a>
+    <a class="nav-box" href="about.html">About Me</a>
+  </div>
+
+  <section class="content">
+    <div class="leaderboard-container">
+      <div class="bits">
+        <h2>Bits Leaderboard</h2>
+        <div id="bits-list">Loading…</div>
+      </div>
+      <div class="subs">
+        <h2>Gifted Subs</h2>
+        <div id="subs-list">Staff can update this list manually.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Staff-only credential input -->
+  <section class="panel" id="twitchCreds">
+    <h3>Twitch API Credentials</h3>
+    <p>Enter your Client ID and Access Token (with <code>bits:read</code> scope).</p>
+    <input id="twitch_client_id" placeholder="Client ID"/>
+    <input id="twitch_access_token" placeholder="Access Token"/>
+    <button onclick="saveTwitchCreds()">Save</button>
+  </section>
+
+  <script src="leaderboard.js"></script>
+</body>
+</html>
