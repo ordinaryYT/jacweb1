@@ -1,0 +1,129 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ThatLegendJack</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <h1>ThatLegendJack</h1>
+  <div class="login-container" id="authBox"><a href="login.html">Login</a></div>
+
+  <div class="nav-center">
+    <a class="nav-box" href="about.html">About Me</a>
+    <a class="nav-box" href="leaderboards.html">Leaderboards</a>
+  </div>
+
+  <section class="player-wrap">
+    <div class="player-frame">
+      <div id="twitch-player"></div>
+      <div id="twitch-offline" class="offline-banner">
+        <div class="offline-text">ThatLegendJackk is currently offline.</div>
+        <a class="offline-btn" target="_blank" href="https://www.twitch.tv/ThatLegendJackk">Go to Twitch</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="social-bar">
+    <a class="social-link" id="link_twitch" href="https://www.twitch.tv/ThatLegendJackk"><img id="img_twitch"></a>
+    <a class="social-link" id="link_tiktok" href="https://www.tiktok.com/@ThatLegendJackk"><img id="img_tiktok"></a>
+    <a class="social-link" id="link_kick" href="https://kick.com/ThatLegendJackk"><img id="img_kick"></a>
+    <a class="social-link" id="link_onlyfans" href="https://onlyfans.com/yourlink"><img id="img_onlyfans"></a>
+  </div>
+
+  <div class="status-container">
+    <div class="circle spotify"><span id="spotify-track">Spotify: Not Playing</span></div>
+    <div class="circle discord" id="discord-status">Discord: Offline</div>
+  </div>
+
+  <div class="panel" id="staffPanel"></div>
+  <div class="panel" id="adminPanel"></div>
+
+  <script src="https://embed.twitch.tv/embed/v1.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
+
+<!-- about.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About - ThatLegendJack</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <h1>About Me</h1>
+  <div class="login-container" id="authBox"><a href="login.html">Login</a></div>
+  <div class="nav-center">
+    <a class="nav-box" href="index.html">Home</a>
+    <a class="nav-box" href="leaderboards.html">Leaderboards</a>
+  </div>
+  <section class="player-wrap"><div id="about-box"></div></section>
+  <script src="main.js"></script>
+</body>
+</html>
+
+<!-- leaderboards.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Leaderboards - ThatLegendJack</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <h1>Leaderboards</h1>
+  <div class="login-container" id="authBox"><a href="login.html">Login</a></div>
+  <div class="nav-center">
+    <a class="nav-box" href="index.html">Home</a>
+    <a class="nav-box" href="about.html">About Me</a>
+  </div>
+  <section class="content">
+    <div class="leaderboard-container">
+      <div class="bits"><h2>Bits Leaderboard</h2><div id="bits-list"></div></div>
+      <div class="subs">
+        <h2>Gifted Subs</h2>
+        <div id="subs-list"></div>
+        <div id="subs-controls" style="display:none;">
+          <input id="sub_user" placeholder="Username"/>
+          <input id="sub_gifts" type="number"/>
+          <button onclick="addOrUpdateSub()">Add/Update</button>
+          <button onclick="resetSubs()">Reset</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="panel" id="twitchCreds">
+    <h3>Twitch API Credentials</h3>
+    <input id="twitch_client_id" placeholder="Client ID"/>
+    <input id="twitch_access_token" placeholder="Access Token"/>
+    <button onclick="saveTwitchCreds()">Save</button>
+  </section>
+  <script src="main.js"></script>
+</body>
+</html>
+
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - ThatLegendJack</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <h1>Login</h1>
+  <form onsubmit="return doLogin(event)">
+    <input id="username" placeholder="Username" required/>
+    <input id="password" type="password" placeholder="Password" required/>
+    <button type="submit">Login</button>
+  </form>
+  <script src="main.js"></script>
+</body>
+</html>
