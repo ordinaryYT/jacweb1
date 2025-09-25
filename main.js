@@ -1,13 +1,8 @@
 /* ============================
-   main.js — ThatLegendJack (static version)
-   - Section routing
-   - Twitch embed (parent = current hostname)
-   - Spotify now playing (paste token once, stored in this browser)
-   - Discord presence via Lanyard (reads ID from <meta name="discord-user-id">)
-   - Leaderboards: Bits (client Helix) + Gifted Subs (localStorage; server optional)
+   main.js — Web Service client
 ============================ */
 
-/* ---------- Helper: JSON API (optional) ---------- */
+/* Helper: JSON API */
 async function api(path, opts = {}) {
   const res = await fetch(path, {
     credentials: 'include',
@@ -23,24 +18,19 @@ async function api(path, opts = {}) {
   try { return await res.json(); } catch { return null; }
 }
 
-/* ============================
-   Router
-============================ */
+/* Router */
 function showSection(id) {
   document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
   const el = document.getElementById(id);
   if (el) el.classList.remove('hidden');
 }
 
-/* ============================
-   Login (demo only in static)
-============================ */
+/* Login (server-first, demo fallback) */
 async function doLogin(e) {
   if (e) e.preventDefault();
   const username = (document.getElementById('username')?.value || '').trim();
   const password = (document.getElementById('password')?.value || '').trim();
 
-  // Try a server login if you later add it; otherwise demo.
   try {
     await api('/api/auth/login', { method: 'POST', body: { username, password } });
     alert(`Logged in as ${username}`);
@@ -51,19 +41,14 @@ async function doLogin(e) {
   return false;
 }
 
-/* ============================
-   Twitch Embed
-============================ */
+/* Twitch Embed */
 const TWITCH_CHANNEL = 'ThatLegendJackk';
 let twitchEmbed = null;
 
 function initTwitch() {
   const el = document.getElementById('twitch-player');
   if (!el) return;
-  if (typeof Twitch === 'undefined' || !Twitch.Embed) {
-    setTimeout(initTwitch, 250);
-    return;
-  }
+  if (typeof Twitch === 'undefined' || !Twitch.Embed) { setTimeout(initTwitch, 250); return; }
   if (twitchEmbed) return;
 
   const parentHost = location.hostname || 'localhost';
@@ -77,9 +62,7 @@ function initTwitch() {
   });
 }
 
-/* ============================
-   Spotify Now Playing
-============================ */
+/* Spotify Now Playing */
 function saveSpotifyToken() {
   const box = document.getElementById('spotify_token');
   const t = (box?.value || '').trim();
@@ -128,14 +111,18 @@ async function updateSpotifyNowPlaying() {
   spotifyTimer = setTimeout(updateSpotifyNowPlaying, 15000);
 }
 
-/* ============================
-   Discord Presence (Lanyard)
-============================ */
+/* Discord Presence via env (/api/config) */
 let DISCORD_USER_ID = '';
 
-function readDiscordIdFromMeta() {
-  const meta = document.querySelector('meta[name="discord-user-id"]');
-  return (meta?.content || '').trim();
+async function loadConfig() {
+  try {
+    const cfg = await api('/api/config'); // { discord_user_id }
+    DISCORD_USER_ID = cfg?.discord_user_id || '';
+    if (DISCORD_USER_ID) connectLanyard();
+    else console.warn('No DISCORD_USER_ID set on server.');
+  } catch (e) {
+    console.warn('Failed to load /api/config:', e.message);
+  }
 }
 
 function connectLanyard() {
@@ -159,9 +146,7 @@ function connectLanyard() {
   ws.addEventListener('close', () => setTimeout(connectLanyard, 3000));
 }
 
-/* ============================
-   Gifted Subs (localStorage; server optional)
-============================ */
+/* Gifted Subs (local; server optional) */
 const SUBS_KEY = 'gifted_subs_alltime_v1';
 
 function lsGetSubs() { try { return JSON.parse(localStorage.getItem(SUBS_KEY) || '[]'); } catch { return []; } }
@@ -171,7 +156,6 @@ async function loadSubs() {
   const box = document.getElementById('subs-list');
   if (!box) return;
 
-  // Try server if you later add /api/subs
   try {
     const subs = await api('/api/subs');
     renderSubsTable(subs, box);
@@ -182,10 +166,7 @@ async function loadSubs() {
 }
 
 function renderSubsTable(rows, box) {
-  if (!rows || !rows.length) {
-    box.innerHTML = '<p>No subs yet.</p>';
-    return;
-  }
+  if (!rows || !rows.length) { box.innerHTML = '<p>No subs yet.</p>'; return; }
   const sorted = [...rows].sort((a, b) => (b.gifts || 0) - (a.gifts || 0));
   const tr = sorted.map((s, i) =>
     `<tr><td>${i + 1}</td><td>${s.username || s.user}</td><td>${s.gifts}</td></tr>`
@@ -198,7 +179,6 @@ async function addOrUpdateSub() {
   const n = parseInt(document.getElementById('sub_gifts')?.value || '0', 10);
   if (!u || isNaN(n)) return alert('Enter username and gifts.');
 
-  // Try server first
   try {
     await api('/api/subs', { method: 'POST', body: { username: u, gifts: n } });
     await loadSubs();
@@ -233,9 +213,7 @@ async function resetSubs() {
   await loadSubs();
 }
 
-/* ============================
-   Twitch Bits (Helix via client creds)
-============================ */
+/* Twitch Bits (Helix via client creds) */
 function saveTwitchCreds() {
   const idEl = document.getElementById('twitch_client_id');
   const tkEl = document.getElementById('twitch_access_token');
@@ -319,14 +297,11 @@ async function refreshBits() {
   }
 }
 
-/* ============================
-   Boot
-============================ */
+/* Boot */
 window.addEventListener('DOMContentLoaded', () => {
-  // Default section
   showSection('home');
 
-  // Twitch player
+  // Twitch embed
   const twitchScript = document.createElement('script');
   twitchScript.src = 'https://embed.twitch.tv/embed/v1.js';
   twitchScript.onload = () => initTwitch();
@@ -335,14 +310,13 @@ window.addEventListener('DOMContentLoaded', () => {
   // Spotify poll
   updateSpotifyNowPlaying();
 
-  // Discord presence
-  DISCORD_USER_ID = readDiscordIdFromMeta();
-  if (DISCORD_USER_ID) connectLanyard();
+  // Discord presence (env)
+  loadConfig();
 
-  // Leaderboards
+  // Leaderboards (subs)
   loadSubs();
 
-  // Prefill saved Twitch creds (convenience)
+  // Prefill saved Twitch creds
   const idEl = document.getElementById('twitch_client_id');
   const tkEl = document.getElementById('twitch_access_token');
   if (idEl) idEl.value = localStorage.getItem('twitch_client_id') || '';
